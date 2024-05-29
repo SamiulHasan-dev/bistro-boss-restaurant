@@ -13,6 +13,7 @@ const Login = () => {
     const location = useLocation();
 
     const from = location.state?.from?.pathname || "/";
+    console.log('state in the location', location.state);
 
     useEffect(()=>{
         loadCaptchaEnginge(6); 
@@ -91,7 +92,7 @@ const Login = () => {
                                 <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                             </label>
                         </div>
-
+                        
                         <div className="form-control">
                             <label className="label">
                             <LoadCanvasTemplate />
@@ -100,8 +101,9 @@ const Login = () => {
                             
                            
                         </div>
+                        {/* TODO: Disable re captcha */}
                         <div className="form-control mt-6">
-                            <input disabled={disable} className="btn btn-primary" type="submit" value="Login" />
+                            <input disabled={false} className="btn btn-primary" type="submit" value="Login" />
                         </div>
                     </form>
                     <p className='text-center'><small>New Here? <Link to="/signUp">Create an account</Link> </small></p>
