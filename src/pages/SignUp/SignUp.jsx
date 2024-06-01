@@ -4,10 +4,12 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 
 
 const SignUp = () => {
+    const axiosPublic = useAxiosPublic();
     const {
         register,
         handleSubmit,
@@ -27,14 +29,24 @@ const SignUp = () => {
 
             updateUserProfile(data.name, data.photoUrl)
             .then(()=>{
-                console.log("user profile updated");
-                reset();
-                Swal.fire({
-                    title: "Profile Updated!",
-                    text: "You clicked the button!",
-                    icon: "success"
-                  });
-                  navigate('/')
+                //create user entry in the database
+                const userInfo = {
+                    name: data.name,
+                    email: data.email
+                }
+                axiosPublic.post('/users',userInfo)
+                .then(res =>{
+                    console.log('user added to the database');
+                    if(res.data.insertedId){
+                        reset();
+                        Swal.fire({
+                            title: "Profile Updated!",
+                            text: "You clicked the button!",
+                            icon: "success"
+                          });
+                          navigate('/')
+                    }
+                })  
             })
             .catch(error=> {
                 console.log(error)
@@ -112,7 +124,7 @@ const SignUp = () => {
                             
                         </div>
                     </form>
-                    <p className="text-center"><small>Already have an account Here? <Link to="/login">Login</Link> </small></p>
+                    <p className="text-center py-4"><small>Already have an account Here? <Link to="/login">Login</Link> </small></p>
                 </div>
             </div>
         </div>
